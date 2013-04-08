@@ -1,0 +1,12 @@
+Package: sharkbase
+Maintainer: Sean Anderson <sean_anderson@sfu.ca>
+Author: Francesco Ferretti and Sean Anderson
+Version: 0.1
+License: GPL-3
+Title: Shark baseline tools
+Description: Functions to manage and analyze shark baseline data. See
+    http://baseline.stanford.edu/
+Collate:
+    'connect_to_pelagic.R'
+    'insert_to_pelagic.R'
+    'sharkbase-package.R'

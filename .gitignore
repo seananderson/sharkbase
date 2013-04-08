@@ -1,0 +1,9 @@
+.Rhistory
+.DS_Store
+.Rapp.history
+.aux
+.log
+.out
+
+# Example code in package build process
+*-Ex.R
