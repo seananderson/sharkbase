@@ -5,6 +5,9 @@
 #' @param data_folder The folder in which the .csv files are stored
 #'
 
+# add this line
+
+
 check_input  <- function(ref, con, data_folder = "data") {
 
   data1 <- dbSendQuery(con, statement = paste("select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'timeseries';",sep=""))  
