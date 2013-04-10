@@ -5,8 +5,6 @@
 #' @param data_folder The folder in which the .csv files are stored
 #'
 
-# add this line
-
 
 check_input  <- function(ref, con, data_folder = "data") {
 
