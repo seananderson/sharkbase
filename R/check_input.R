@@ -59,29 +59,29 @@ check_input  <- function(ref, con, data_folder = "data") {
   ts_spp <- laply(ts_dat, function(x) unique(x$species))
   ms_spp <- unique(master_dat$species)
   if(length(setdiff(ts_spp, ms_spp)) > 0)
-    stop("Species in ts and master don't match")
+    warning("Species in ts and master don't match")
 
   # do all cols match ts or master cols in db?
   for(i in 1:length(ts_files)) {
     ts_names_check <- names(ts_dat[[i]]) %in% timeseries_db_cols
     if(FALSE %in% ts_names_check)
-      stop(paste(names(ts_dat[[i]])[!ts_names_check], "was found in",
+      warning(paste(names(ts_dat[[i]])[!ts_names_check], "was found in",
           ts_files[i], "but is not in timeseries table of database"))
   }
   master_names_check <- names(master_dat) %in% master_db_cols
   if(FALSE %in% master_names_check)
-    stop(paste(names(master_dat)[!master_names_check], "not in master database", collapse = "; "))
+    warning(paste(names(master_dat)[!master_names_check], "not in master database", collapse = "; "))
 
   # are there the same number of rows in master as time series files?
   if(nrow(master_dat) != length(ts_files))
-    stop("Number of rows in Master file don't match number of ts .csv files")
+    warning("Number of rows in Master file don't match number of ts .csv files")
 
   # are the years and species filled out without gaps?
   for(i in 1:length(ts_files)) {
     if(sum(is.na(ts_dat[[i]]$species)) > 0)
-      stop(paste("Gaps in species column in", ts_files[i]))
+      warning(paste("Gaps in species column in", ts_files[i]))
     if(sum(is.na(ts_dat[[i]]$year)) > 0)
-      stop(paste("Gaps in year column in", ts_files[i]))
+      warning(paste("Gaps in year column in", ts_files[i]))
   }
 
   # do the species already exist in the db?
@@ -99,7 +99,7 @@ check_input  <- function(ref, con, data_folder = "data") {
   invisible(list(master_dat = master_dat, ts_dat = ts_dat))
 }
 
-require("RPostgreSQL")
-con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
-check_input("Andrews.Brown.2009", con = con)
+#require("RPostgreSQL")
+#con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
+#check_input("Andrews.Brown.2009", con = con)
 
