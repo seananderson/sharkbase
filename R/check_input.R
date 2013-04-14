@@ -101,5 +101,5 @@ check_input  <- function(ref, con, data_folder = "data") {
 
 #require("RPostgreSQL")
 #con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
-#check_input("Andrews.Brown.2009", con = con)
+#x <- check_input("Andrews.Brown.2009", con = con)
 
