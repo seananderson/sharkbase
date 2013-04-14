@@ -5,19 +5,21 @@
 #' @param data_folder The folder in which the .csv files are stored
 #'
 
-
 check_input  <- function(ref, con, data_folder = "data") {
 
-  data1 <- dbSendQuery(con, statement = paste("select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'timeseries';",sep=""))  
+  data1 <- dbSendQuery(con, statement = paste("select column_name from
+      INFORMATION_SCHEMA.COLUMNS where table_name =
+      'timeseries';",sep=""))  
   data1<- fetch(data1, n = -1)  
   timeseries_db_cols <- as.character(data1[,1])
 
-  data1 <- dbSendQuery(con, statement = paste("select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'master';",sep=""))  
+  data1 <- dbSendQuery(con, statement = paste("select column_name from
+      INFORMATION_SCHEMA.COLUMNS where table_name =
+      'master';",sep=""))  
   data1<- fetch(data1, n = -1)  
   master_db_cols <- as.character(data1[,1])
 
   files <- list.files(path = data_folder, pattern = paste(ref, "*", sep = ""))
-
 
   # is there a master file?
   master_t_or_f <- sapply(files, function(i) grepl("Master", i))
@@ -28,10 +30,12 @@ check_input  <- function(ref, con, data_folder = "data") {
   master_file <- files[master_t_or_f] 
   ts_files <- files[-master_t_or_f] 
 
-  master_dat <- read.csv(paste(data_folder, "/", master_file, sep = ""), strip.white = TRUE, stringsAsFactors = FALSE)
+  master_dat <- read.csv(paste(data_folder, "/", master_file, sep =
+      ""), strip.white = TRUE, stringsAsFactors = FALSE)
   ts_dat <- list()
   for(i in 1:length(ts_files)) {
-    ts_dat[[i]] <- read.csv(paste(data_folder, "/", ts_files[i], sep = ""), stringsAsFactors = FALSE, strip.white = TRUE)
+    ts_dat[[i]] <- read.csv(paste(data_folder, "/", ts_files[i], sep =
+        ""), stringsAsFactors = FALSE, strip.white = TRUE)
   }
 
   # one ref code listed?
@@ -65,11 +69,13 @@ check_input  <- function(ref, con, data_folder = "data") {
   for(i in 1:length(ts_files)) {
     ts_names_check <- names(ts_dat[[i]]) %in% timeseries_db_cols
     if(FALSE %in% ts_names_check)
-      stop(paste(names(ts_dat[[i]])[!ts_names_check], "was found in", ts_files[i], "but is not in timeseries table of database"))
+      stop(paste(names(ts_dat[[i]])[!ts_names_check], "was found in",
+          ts_files[i], "but is not in timeseries table of database"))
   }
   master_names_check <- names(master_dat) %in% master_db_cols
   if(FALSE %in% master_names_check)
-    stop(paste(names(master_dat)[!master_names_check], "not in master database", collapse = "; "))
+    stop(paste(names(master_dat)[!master_names_check], "not in master
+        database", collapse = "; "))
 
   # are there the same number of rows in master as time series files?
   if(nrow(master_dat) != length(ts_files))
@@ -101,19 +107,4 @@ check_input  <- function(ref, con, data_folder = "data") {
 #require("RPostgreSQL")
 #con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
 #check_input("Andrews.Brown.2009", con = con)
-
-
-#############
-
-#we need:
-#a function that finds and checks master for errors
-#a function that finds all tabs and figs
-#a function that finds, combines tabs and figs and checks for errors and merges
-#a function that checks master and ts series
-#a function that writes the SQL statement
-#a function that runs the SQL statement
-#you should be able to run it by running a function with only the ref code
-
-#head(d1)
-#head(d2)
 
