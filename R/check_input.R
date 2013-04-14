@@ -7,15 +7,11 @@
 
 check_input  <- function(ref, con, data_folder = "data") {
 
-  data1 <- dbSendQuery(con, statement = paste("select column_name from
-      INFORMATION_SCHEMA.COLUMNS where table_name =
-      'timeseries';",sep=""))  
+  data1 <- dbSendQuery(con, statement = paste("select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'timeseries';",sep=""))  
   data1<- fetch(data1, n = -1)  
   timeseries_db_cols <- as.character(data1[,1])
 
-  data1 <- dbSendQuery(con, statement = paste("select column_name from
-      INFORMATION_SCHEMA.COLUMNS where table_name =
-      'master';",sep=""))  
+  data1 <- dbSendQuery(con, statement = paste("select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'master';",sep=""))  
   data1<- fetch(data1, n = -1)  
   master_db_cols <- as.character(data1[,1])
 
@@ -74,8 +70,7 @@ check_input  <- function(ref, con, data_folder = "data") {
   }
   master_names_check <- names(master_dat) %in% master_db_cols
   if(FALSE %in% master_names_check)
-    stop(paste(names(master_dat)[!master_names_check], "not in master
-        database", collapse = "; "))
+    stop(paste(names(master_dat)[!master_names_check], "not in master database", collapse = "; "))
 
   # are there the same number of rows in master as time series files?
   if(nrow(master_dat) != length(ts_files))
@@ -104,7 +99,7 @@ check_input  <- function(ref, con, data_folder = "data") {
   invisible(list(master_dat = master_dat, ts_dat = ts_dat))
 }
 
-#require("RPostgreSQL")
-#con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
-#check_input("Andrews.Brown.2009", con = con)
+require("RPostgreSQL")
+con <- dbConnect(PostgreSQL(), user= "postgres", password="", dbname="pelagic")
+check_input("Andrews.Brown.2009", con = con)
 
